@@ -33,12 +33,13 @@ def create_table():
                   CREATE TABLE IF NOT EXISTS students_courses (
                     id INTEGER PRIMARY KEY, 
                     student_id INTEGER,
-                    course_id INTEGER UNIQUE,
+                    course_id INTEGER,
                     FOREIGN KEY (course_id) REFERENCES courses (id),
                     FOREIGN KEY (student_id) REFERENCES students (id)
+                    UNIQUE(student_id,course_id)
                     )""")                
-    
-    
+
+
 def create_fake_data(students_num=40, teachers_num=4):
     fake = Faker()
     for student in range(students_num):
@@ -52,3 +53,4 @@ def create_fake_data(students_num=40, teachers_num=4):
     for course in courses:
         teacher_ids =[tup[0] for tup in execute_query("SELECT id FROM teachers")]
         execute_query(F"INSERT INTO courses (name,teacher_id) VALUES ('{course}','{random.choice(teacher_ids)}') ")
+
