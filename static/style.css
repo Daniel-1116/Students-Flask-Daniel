@@ -7,6 +7,16 @@
     color: #45a049;
 
   }
+  .message {
+
+    background-color:transparent;
+    width: fit-content;
+    color: #000000;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: x-large;
+  }
   
   ul {
     list-style-type: none;
