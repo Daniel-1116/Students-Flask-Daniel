@@ -1,6 +1,8 @@
 from flask import Flask, request, redirect ,url_for ,render_template, flash, get_flashed_messages
 from setup_db import execute_query
 from email_validator import validate_email,EmailNotValidError
+from sqlite3 import IntegrityError
+from collections import namedtuple
 
 app = Flask(__name__)
 
@@ -10,7 +12,13 @@ app.secret_key = "SA3202DSG;=4334/./322/1`1423DSVKGOT"
 
 @app.route('/register/<student_id>/<course_id>')
 def register(student_id,course_id):
-    execute_query(f"INSERT INTO students_courses (student_id,course_id) VALUES ('{student_id}','{course_id}')")
+    try:
+        execute_query(f"INSERT INTO students_courses (student_id,course_id) VALUES ('{student_id}','{course_id}')")
+    except IntegrityError:
+        student_name = [s[0] for s in execute_query(f"SELECT name FROM students WHERE id='{student_id}'")]
+        course_name = [s[0] for s in execute_query(f"SELECT name FROM courses WHERE id='{course_id}'")]
+        return f"{student_name} is already registered to {course_name}"
+        
     return redirect(url_for('registrations',student_id=student_id))
     
 @app.route('/registrations/<student_id>')
@@ -55,3 +63,15 @@ def add_course():
     else:
         teachers = [t[0] for t in execute_query("SELECT name FROM teachers")]
         return render_template("add_course.html",teachers = teachers)
+
+
+# @app.route('/')
+# def something(student_id):
+#     course_names = execute_query(f"SELECT courses.name FROM courses JOIN students_courses.course_id=course_id WHERE students_courses.student_id={student_id}")
+#     # courses = []
+    # for course_tuple in course_names:
+    #     course=namedtuple("Course",["name","teacher"])
+    #     course.name = course_tuple[0]
+    #     courses.append(course)
+   
+  
