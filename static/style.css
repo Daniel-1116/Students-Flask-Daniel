@@ -1,12 +1,24 @@
 
 .main {
     width: 500px;
-    margin: 20px auto;
+    margin: 100px auto;
     text-align:left;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #45a049;
 
   }
+
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+  width: 1000px;
+  height: 600px;
+  border: 1px solid black;
+  padding: 1px black;
+  box-shadow: 0px 2px 12px 0px; 
+}
+
   .message {
 
     background-color:transparent;
@@ -78,6 +90,7 @@
     border-radius: 75px;
     width: 30%;
     margin-left: 35%;
+    margin-top: 50px;
     
   }
 
