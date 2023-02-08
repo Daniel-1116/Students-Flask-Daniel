@@ -97,4 +97,50 @@
   button[type="submit"]:hover {
     background-color: #45a049;
   }
+
+.img-container {
+  width: 100%;
+  height: 500px;
+  text-align: center;
   
+
+}
+
+img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  opacity:calc(0.8);
+} 
+
+.courses {
+  height: 700px;
+  width: fit-content;
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: rgba(rgb(182, 182, 182), rgb(240, 240, 240), rgb(180, 180, 180), 0.6);
+  flex-direction: row;
+  gap: 15rem;
+  position: relative;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  
+}
+.headline{
+  margin-top: 15rem;
+  margin-bottom: 10rem;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  position: relative;
+}
+
+.each-course {
+  text-align: center;
+  height: fit-content;
+  width: fit-content;
+  box-shadow: 1px 0px 10px 0px;
+  border-style: hidden;
+  
+  
+}

@@ -9,6 +9,11 @@ app = Flask(__name__)
 app.secret_key = "SA3202DSG;=4334/./322/1`1423DSVKGOT"
 
 
+@app.route('/')
+def homepage():
+    courses = [c[0] for c in execute_query("SELECT name FROM courses")]
+    return render_template("home.html",courses=courses)
+
 
 @app.route('/register/<student_id>/<course_id>')
 def register(student_id,course_id):
@@ -63,6 +68,7 @@ def add_course():
     else:
         teachers = [t[0] for t in execute_query("SELECT name FROM teachers")]
         return render_template("add_course.html",teachers = teachers)
+
 
 
 # @app.route('/')
