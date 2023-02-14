@@ -3,7 +3,7 @@ from setup_db import execute_query
 from email_validator import validate_email,EmailNotValidError
 from sqlite3 import IntegrityError
 from collections import namedtuple
-
+from classes import Course,Student
 app = Flask(__name__)
 
 app.secret_key = "SA3202DSG;=4334/./322/1`1423DSVKGOT"
@@ -11,8 +11,8 @@ app.secret_key = "SA3202DSG;=4334/./322/1`1423DSVKGOT"
 
 @app.route('/')
 def homepage():
-    courses = [c[0] for c in execute_query("SELECT name FROM courses")]
-    return render_template("home.html",courses=courses)
+    course = [Course(c_id,name,desc,t_id) for c_id,name,desc,t_id in execute_query("SELECT * FROM courses")]
+    return render_template("home.html",course=course)
 
 
 @app.route('/register/<student_id>/<course_id>')
@@ -50,7 +50,8 @@ def add_new_student():
 
 @app.route('/students')
 def all_students():
-    students = [s[0] for s in execute_query("SELECT name FROM students")]
+    students = [Student(s_id,name,email) for s_id,name,email in execute_query("SELECT * FROM students")]
+    
     return render_template('students.html',students = students)  
 
 
@@ -69,15 +70,12 @@ def add_course():
         teachers = [t[0] for t in execute_query("SELECT name FROM teachers")]
         return render_template("add_course.html",teachers = teachers)
 
+@app.route('/courses')
+def show_courses():        
+    course = [Course(c_id,name,desc,t_id) for c_id,name,desc,t_id in execute_query("SELECT * FROM courses")]
+    return render_template("courses.html",course = course)
 
 
-# @app.route('/')
-# def something(student_id):
-#     course_names = execute_query(f"SELECT courses.name FROM courses JOIN students_courses.course_id=course_id WHERE students_courses.student_id={student_id}")
-#     # courses = []
-    # for course_tuple in course_names:
-    #     course=namedtuple("Course",["name","teacher"])
-    #     course.name = course_tuple[0]
-    #     courses.append(course)
-   
-  
+@app.route('/search',methods = ['GET','POST'])
+def admin_search():
+    pass

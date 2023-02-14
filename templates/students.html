@@ -5,21 +5,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
     <title>All Students</title>
 </head>
 
 <body>
+    {% include "navbar.html" %}
     {% with messages = get_flashed_messages() %}
     {% if messages %}
-        {% for message in messages %}
-        <p><strong>{{message}}</strong></p>
-        {% endfor %}
+    {% for message in messages %}
+    <p><strong>{{message}}</strong></p>
+    {% endfor %}
     {% endif %}
     {% endwith %}
-    <h1>My Students</h1>
-    <div class="main">
+    
+    <div class="main-students">
+        <h1>My Students</h1>
         {% for student in students %}
-        <div class="eachStudent">{{student}}</div> 
+        <table class="students-table">
+            <tr><td>{{ student.name }}</td><td>{{ student.email }}</td><td>{{ student.course }}</td></tr>  
+        </table>
         {% endfor %}
     </div>
 

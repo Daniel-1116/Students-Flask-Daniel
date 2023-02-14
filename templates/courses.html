@@ -1,12 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    
     <title>Courses</title>
 </head>
+
 <body>
-    
+    <script src="/static/index.js" defer></script>
+    {% include "navbar.html" %}
+    {% for c in course %}
+    <div class="course-info">
+        <div class="course">{{ c.name }}</div>
+        <div class="teacher">{{ c.t_name }}</div>
+        <p class="desc">{{ c.desc }}</p>
+    </div>
+    {% endfor %}
 </body>
+
 </html>
