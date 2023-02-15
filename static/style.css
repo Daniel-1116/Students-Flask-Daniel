@@ -14,7 +14,7 @@
   margin-top: 50px;
   width: 1000px;
   height: 600px;
-  border: 1px solid black;
+  border: 1px solid #ccc;
   padding: 1px black;
   box-shadow: 0px 2px 12px 0px; 
 }
@@ -30,6 +30,8 @@
     font-size: x-large;
   }
   
+
+
   ul {
     list-style-type: none;
     margin: 0;
@@ -37,6 +39,7 @@
     overflow: hidden;
     border: 1px solid #e7e7e7;
     background-color: #424242;
+  
   }
   
   li {
@@ -47,7 +50,7 @@
     display: block;
     color: rgb(255, 255, 255);
     text-align: center;
-    padding: 14px 16px;
+    padding: 20px 26px;
     text-decoration: none;
   }
   
@@ -110,8 +113,7 @@ img {
   height: 100%;
   width: 100%;
   object-fit: cover;
-  opacity:calc(0.8);
-  image-resolution:initial;
+  opacity:calc(0.9);
 } 
 
 .courses {
@@ -136,12 +138,115 @@ img {
   position: relative;
 }
 
-.each-course {
+.latest-courses {
+  height: 500px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10rem;
+  background-image: url(/static/img/background.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: calc(0.9);
+}
+
+.course-card {
+  font-family: sans-serif;
+  font: caption;
+  justify-content: space-evenly;
+}
+
+.course-name {
+  justify-content: center;
+  font-family: sans-serif;
+  font-size: xx-large;
+}
+
+.course-info {
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f4f4;
+  border: 1px solid #dadada;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  margin: auto;
+  margin-top: 3rem;
+}
+
+.course-info:hover {
+  background-color: #e7e7e7;
+}
+
+.teacher, .desc {
+  display: none;
+  font-family: sans-serif;
+  font-weight: lighter;
+  
+}
+
+.course {
+  font-size: 24px;
+  font-weight: bold;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  margin-bottom: 10px;
+  cursor: pointer;
+  text-align: center;  
+}
+
+.main-students {
+  margin: 20px auto;
+  width: 80%;
   text-align: center;
-  height: fit-content;
-  width: fit-content;
-  box-shadow: 1px 0px 10px 0px;
-  border-style: hidden;
+}
+
+h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 3rem;
+  color: #000000;
+  background: linear-gradient(90deg, #000000, #4e755d);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   
-  
+  margin: 0;
+  padding: 20px;
+}
+
+
+.students-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.students-table th {
+  background-color: #242424;
+  color: #fff;
+  padding: 15px;
+  font-weight:bolder;
+  text-align: left;
+}
+
+.students-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.students-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.students-table tr:hover {
+  background-color: #ddd;
+}
+
+.search-students {
+  width: 500px;
+  margin: 100px auto;
+  text-align:left;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #45a049;
+
 }

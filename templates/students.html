@@ -10,6 +10,7 @@
 </head>
 
 <body>
+    <script src="/static/index.js" defer></script>
     {% include "navbar.html" %}
     {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -18,14 +19,29 @@
     {% endfor %}
     {% endif %}
     {% endwith %}
-    
+
+    <div class="search-students">
+        <input type="text" class="keyword" id="search-input" placeholder="Search By Name..." autofocus>
+        <button type="submit" onclick="filterTable()">Search</button>
+    </div>
+
+
     <div class="main-students">
         <h1>My Students</h1>
-        {% for student in students %}
-        <table class="students-table">
-            <tr><td>{{ student.name }}</td><td>{{ student.email }}</td><td>{{ student.course }}</td></tr>  
-        </table>
+        <table class="students-table" id="students-table">
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Course</th>
+            </tr>
+            {% for student in students %}
+            <tr>
+                <td>{{ student.name }}</td>
+                <td>{{ student.email }}</td>
+                <td>{{ student.course }}</td>
+            </tr>
         {% endfor %}
+    </table>
     </div>
 
 </body>
