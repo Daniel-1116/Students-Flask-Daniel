@@ -48,6 +48,9 @@ def create_fake_data(students_num=40, teachers_num=4):
     
     for teacher in range(teachers_num):
         execute_query(f"INSERT INTO teachers (name,email) VALUES ('{fake.name()}','{fake.email()}')")
+    
+    for course in range(1):
+        execute_query(f"INSERT INTO courses (name,description,teacher_id) VALUES ('Demo-Course','This is a Demo Course','1')")
         
 
 
