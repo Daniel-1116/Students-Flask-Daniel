@@ -20,7 +20,6 @@
 }
 
   .message {
-
     background-color:transparent;
     width: fit-content;
     color: #000000;
@@ -30,9 +29,29 @@
     font-size: x-large;
   }
   
+.navbar {
+  display: flex;
+  flex-direction: column;
+}
 
+
+.navbar-search-li {
+  margin-left: auto;
+  margin-right: 5px;
+}
+
+.navbar-search {
+  display: flex;
+  align-items: center;
+}
+
+
+#search-keyword {
+  width: fit-content; 
+}
 
   ul {
+    display: flex;
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -41,7 +60,13 @@
     background-color: #424242;
   
   }
+
+li .login-a:hover {
+  background-color: transparent!important;
+  box-shadow: 5px  #dadada!important;
   
+}
+
   li {
     float: left;
   }
@@ -63,11 +88,15 @@
     background-color: #000000;
   }
 
-  
-  
+a {
+  text-decoration: none;
+  color: #000000;
+}
+    
   input[type="text"],
   input[type="email"],
   button[type="submit"],
+  input[type="password"],
   textarea {
     width: 100%;
     padding: 12px 20px;
@@ -138,6 +167,15 @@ img {
   position: relative;
 }
 
+h1 {
+  margin-top: 15rem;
+  margin-bottom: 10rem;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  position: relative;
+}
+
 .latest-courses {
   height: 500px;
   display: flex;
@@ -193,6 +231,7 @@ img {
   margin-bottom: 10px;
   cursor: pointer;
   text-align: center;  
+  
 }
 
 .main-students {
@@ -209,15 +248,16 @@ h1 {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  
   margin: 0;
   padding: 20px;
 }
 
 
 .students-table {
-  width: 100%;
+  width:50%;
   border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .students-table th {
@@ -250,3 +290,41 @@ h1 {
   color: #45a049;
 
 }
+
+.attendence {
+  margin-top: 2rem;
+  margin-bottom: 5rem;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  position: relative;
+  font-family: sans-serif;
+}
+.attendence a {
+  font:bold;
+  color: #000000;
+}
+
+.course-attendence  {
+ margin-left: auto;
+ margin-right: auto;
+
+}
+
+.students-attend * {
+display: flex;
+flex-direction: row;
+gap: 10px;
+
+}
+
+.students-attend input[type="submit"] {
+  background-color: #4CAF49;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.students-attend input[type="submit"]:hover {
+  background-color: #2c8d34;
+}
+

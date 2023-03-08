@@ -6,20 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/style.css">
-    
-    <title>Courses</title>
+    <title>Document</title>
 </head>
 
 <body>
-    <script src="/static/index.js" defer></script>
     {% include "navbar.html" %}
+    <script src="/static/index.js" defer></script>
     {% for c in course %}
-    <div class="course-info" onclick="onclick()">
-        <div class="course">{{ c.name }}</div>
-        <div class="teacher">{{ c.t_name }}</div>
-        <p class="desc">{{ c.desc }}</p>
+    <div class="course-info">
+       <div class="course"><a href="attend/{{ c.c_id }}">{{ c.name }}</a></div>
     </div>
     {% endfor %}
+
 </body>
 
 </html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>Profile</title>
+</head>
+
+<body>
+    {% include "navbar.html" %}
+    <h1>Welcome {{ t_name }}</h1>
+    {% if course %}
+    {% for c in course %}
+    <h2>Course: {{ c.name }}</h2>
+    {% for student in c.students %}
+    <form action="" method="post" >
+        {{student}}
+        <input type="number" name="grade" id="">
+        <input type="submit" value="Change Grade">
+    </form>
+    {% endfor %}
+    {% endfor %}
+    {% else %}
+    <h2>No Course Assigned</h2>
+    {% endif %}
+</body>
+
+</html>

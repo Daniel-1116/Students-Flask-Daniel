@@ -38,8 +38,25 @@ def create_table():
                     FOREIGN KEY (course_id) REFERENCES courses (id),
                     FOREIGN KEY (student_id) REFERENCES students (id)
                     UNIQUE(student_id,course_id)
-                    )""")                
-
+                    )""") 
+    execute_query("""
+                  CREATE TABLE IF NOT EXISTS users (
+                  id INTEGER PRIMARY KEY,
+                  email TEXT NOT NULL UNIQUE,
+                  password TEXT NOT NULL,
+                  role TEXT NOT NULL)""")               
+    
+    execute_query("""
+                  CREATE TABLE IF NOT EXISTS attendances (
+                    id INTEGER PRIMARY KEY, 
+                    student_id INTEGER,
+                    course_id INTEGER,
+                    attendence TEXT,
+                    date TEXT,
+                    FOREIGN KEY (course_id) REFERENCES courses (id),
+                    FOREIGN KEY (student_id) REFERENCES students (id)
+                    UNIQUE(student_id,course_id,date)
+                    )""") 
 
 def create_fake_data(students_num=40, teachers_num=4):
     fake = Faker()
@@ -52,8 +69,3 @@ def create_fake_data(students_num=40, teachers_num=4):
     for course in range(1):
         execute_query(f"INSERT INTO courses (name,description,teacher_id) VALUES ('Demo-Course','This is a Demo Course','1')")
         
-
-
-if __name__ == "__main__":
-    create_table()
-    create_fake_data()

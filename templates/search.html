@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>Results</title>
+</head>
+
+<body>
+    {% include "navbar.html" %}
+    <script src="/static/index.js" defer></script>
+    <div class="results">
+        <h1>Teacher Results</h1>
+        <div class="t_results">
+            <table class="students-table">
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                </tr>
+                {% for t in teachers %}
+                <tr>
+                    <td>{{ t[0] }}</td>
+                    <td>{{ t[1] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <h1>Courses Results</h1>
+        <div class="c_results">
+            <table class="students-table">
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+                {% for c in courses %}
+                <tr>
+                    <td>{{ c[0] }}</td>
+                    <td>{{ c[1] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <h1>Students Results</h1>
+        <div class="s_results">
+            <table class="students-table">
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                </tr>
+                {% for s in students %}
+                <tr>
+                    <td>{{ s[0] }}</td>
+                    <td>{{ s[1] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+
+        </div>
+    </div>
+</body>
+
+</html>

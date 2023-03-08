@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>Attend</title>
+</head>
+
+<body>
+    {% include "navbar.html" %}
+    <script src="/static/index.js"></script>
+    <div class="attendence"><a href="/attendence">Attendence</a></div>
+    <div class="course-attendence">
+        {% for c in course %}
+        <h1> Attendence For {{ c.name }}</h1>
+        <p>Date: {{ date }}</p>
+        {% for s_id,s_name in c.students %}
+        <div class="students-attend">
+            <form action="" method="post">
+                <div class="student-info">
+                    <input type="hidden" name="s_id_" value="{{s_id}}">
+                   
+                    <span class="student-name" style="width: 120px;">{{ s_name }}</span>
+                    <div class="radio-buttons">
+                        {% if c_attend[s_id] == 'yes' %}
+                        YES<input type="radio" name="choice" value="yes" checked>
+                        {% else %}
+                        YES<input type="radio" name="choice" value="yes">
+                        {% endif %}
+
+                        {% if c_attend[s_id] == 'no' %}
+                        NO<input type="radio" name="choice" value="no" checked>
+                        {% else %}
+                        NO<input type="radio" name="choice" value="no">
+                        {% endif %}
+                        
+                    
+                    </div>
+                </div>
+                <input type="submit" value="Set">
+            </form>
+        </div>
+        <br>
+        {% endfor %}
+        {% endfor %}
+
+    </div>
+
+</body>
+
+</html>

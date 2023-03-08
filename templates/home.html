@@ -12,18 +12,23 @@
 <body>
     {% include "navbar.html" %}
     <div class="img-container">
+        <div class="message">
+            <p><strong>{{message}}</strong></p>
+        </div>
+        <div class="attendence"><a href="/attendence">Attendence</a></div>
         <h1>The School That Will Build Your Future</h1><br>
 
         <img src="/static/img/student-group.jpg" alt="Studying Group">
     </div>
+
     <div class="headline">
         <h1>Our latest Courses That Might Interest You!</h1>
     </div>
     <div class="latest-courses">
         {% for c in course[-2:] %}
         <div class="course-card">
-                <div class="course-name">{{ c.name }}</div>
-                <div class="course-teacher">{{ c.t_name }}</div>
+            <div class="course-name">{{ c.name }}</div>
+            <div class="course-teacher">{{ c.t_name }}</div>
             <p class="desc">{{ c.desc }}</p>
         </div>
         {% endfor %}
