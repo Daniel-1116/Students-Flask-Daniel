@@ -153,8 +153,7 @@ def get_records(c_id):
 def course_attend(course_id):
     if request.method == 'POST':
         course = [Course(c_id,name,desc,t_id) for c_id,name,desc,t_id in execute_query(f"SELECT * FROM courses WHERE id={course_id}")]
-        date = datetime.date.today()
-        date = '2023-03-16'
+        date = "2023-03-10"
         choice = request.form['choice']
         s_id = request.form['s_id_']
         execute_query(f"UPDATE attendances SET attendence='{choice}'  WHERE student_id='{s_id}' AND course_id='{course_id}' AND date='{date}'")
@@ -162,21 +161,18 @@ def course_attend(course_id):
         return redirect(url_for("course_attend",course_id = course_id))
     else:
         course = [Course(c_id,name,desc,t_id) for c_id,name,desc,t_id in execute_query(f"SELECT * FROM courses WHERE id={course_id}")]
-        date = datetime.date.today()
+        date = "2023-03-10"
         attendence = get_records(course_id)
-        dates = [d[0] for d in execute_query(f"SELECT date FROM attendances WHERE course_id ={course_id}")]
-        if date in dates:
+        result = execute_query(f"SELECT COUNT(*) FROM attendances WHERE course_id={course_id} AND date='{date}'")
+        if result[0][0] > 0:
             return render_template("attend.html",course = course, date = date,c_attend = attendence)
-        else:    
-            course = [Course(c_id,name,desc,t_id) for c_id,name,desc,t_id in execute_query(f"SELECT * FROM courses WHERE id={course_id}")]
-            date = datetime.date.today()
-            attendence = get_records(course_id)
+        else:
             student_ids = [ids[0] for ids in execute_query(f"SELECT student_id FROM students_courses WHERE course_id = {course_id}")]
             for s_id in student_ids:
                 execute_query(f"INSERT INTO attendances (student_id,course_id,date) VALUES ('{s_id}','{course_id}','{date}')")
+            attendence = get_records(course_id)
             return render_template("attend.html",course = course, date = date,c_attend = attendence)
-           
-    
+
         
         
 
