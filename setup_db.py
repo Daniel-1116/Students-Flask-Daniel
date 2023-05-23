@@ -93,9 +93,10 @@ def create_fake_data(students_num=40, teachers_num=4):
     
     for course_name in courses:
         teacher_ids = [tup[0] for tup in execute_query("SELECT id FROM teachers")]
-        execute_query(f"INSERT INTO courses (name, teacher_id) VALUES ('{course_name}','{random.choice(teacher_ids)}')")
+        execute_query(f"INSERT INTO courses (name, description, teacher_id) VALUES ('{course_name}','A Very Nice Course','{random.choice(teacher_ids)}')")
     execute_query("INSERT INTO users VALUES (NULL,'admin@admin.com','admin','admin')")
 
-if __name__ == "__main__":
-    create_table()
-    create_fake_data()
+
+
+create_table()
+create_fake_data()
