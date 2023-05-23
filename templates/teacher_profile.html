@@ -7,9 +7,9 @@
     <div class="attendance"><a href="/teacher/{{ t_id }}/attendance">Attendance</a></div>
     {% if course %}
     {% for c in course %}
-        <h2>Course: {{ c.name }}</h2>
+    <div class="course-head"><h2>Course: {{ c.name }}</h2></div>
         {% for student in c.students %}
-            <div class="students-grades" style="display: flex; flex-direction: row; align-items: center;">
+            <div class="students-grades">
                 <form action="" method="post">
                     <input type="hidden" name="c_id" value="{{ c.c_id }}">
                     <input type="hidden" name="s_id" value="{{ student[0] }}">

@@ -1,11 +1,7 @@
 import os
-import classes
-import setup_db
-import test_db
 from werkzeug.utils import secure_filename
 from flask import Flask, abort, jsonify, request, redirect, url_for, render_template, flash, get_flashed_messages, session
 from setup_db import execute_query
-from email_validator import validate_email, EmailNotValidError
 from sqlite3 import IntegrityError
 from collections import namedtuple
 from classes import Course, Student, Attendence
@@ -55,14 +51,22 @@ def get_records(c_id, date):
     return attendances
 
 
-def get_courses_info(teacher_id=None):
+def get_courses_info(teacher_id=None, course_id=None):
     if teacher_id is not None:
-        query = f"""
-            SELECT courses.id, courses.name, courses.description, teachers.name
-            FROM courses
-            JOIN teachers ON courses.teacher_id = teachers.id
-            WHERE courses.teacher_id = {teacher_id}
-        """
+        if course_id is not None:
+            query = f"""
+                SELECT courses.id, courses.name, courses.description, teachers.name
+                FROM courses
+                JOIN teachers ON courses.teacher_id = teachers.id
+                WHERE courses.teacher_id = {teacher_id} AND courses.id = {course_id}
+            """
+        else:
+            query = f"""
+                SELECT courses.id, courses.name, courses.description, teachers.name
+                FROM courses
+                JOIN teachers ON courses.teacher_id = teachers.id
+                WHERE courses.teacher_id = {teacher_id}
+            """
     else:
         query = """
             SELECT courses.id, courses.name, courses.description, teachers.name
@@ -109,7 +113,6 @@ def user_logout():
 
 @app.route('/', methods=['GET', 'POST'])
 def homepage():
-    allowed_extensions = list(ALLOWED_EXTENSIONS)
     course_details = execute_query("""SELECT courses.name, teachers.name FROM courses 
                                     JOIN teachers ON courses.teacher_id = teachers.id """)
     course_names = [names[0] for names in course_details]
@@ -124,29 +127,35 @@ def homepage():
     return render_template("home.html", courses=courses)
 
 
-@app.route('/register',methods = ['GET','POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         student_id = request.form["s_id"]
         course_id = request.form["c_id"]
-        student_name = [s[0] for s in execute_query(f"SELECT name FROM students WHERE id='{student_id}'")]
-        course_name = [s[0] for s in execute_query(f"SELECT name FROM courses WHERE id='{course_id}'")]
+        student_name = [s[0] for s in execute_query(
+            f"SELECT name FROM students WHERE id='{student_id}'")]
+        course_name = [s[0] for s in execute_query(
+            f"SELECT name FROM courses WHERE id='{course_id}'")]
         try:
-            execute_query(f"INSERT INTO students_courses (student_id,course_id) VALUES ('{student_id}','{course_id}')")
+            execute_query(
+                f"INSERT INTO students_courses (student_id,course_id) VALUES ('{student_id}','{course_id}')")
         except IntegrityError:
-            student_name = [s[0] for s in execute_query(f"SELECT name FROM students WHERE id='{student_id}'")]
-            course_name = [s[0] for s in execute_query(f"SELECT name FROM courses WHERE id='{course_id}'")]
-            response = {'message': f"{student_name} is already registered to {course_name}"}
+            student_name = [s[0] for s in execute_query(
+                f"SELECT name FROM students WHERE id='{student_id}'")]
+            course_name = [s[0] for s in execute_query(
+                f"SELECT name FROM courses WHERE id='{course_id}'")]
+            response = {
+                'message': f"{student_name} is already registered to {course_name}"}
             return jsonify(response)
-        execute_query(f"INSERT INTO students_courses (student_id,course_id) VALUES ('{student_id}','{course_id}')")
-        response = {'message': f'Successfully Added {student_name} to {course_name}'}
+        execute_query(
+            f"INSERT INTO students_courses (student_id,course_id) VALUES ('{student_id}','{course_id}')")
+        response = {
+            'message': f'Successfully Added {student_name} to {course_name}'}
         return jsonify(response)
     else:
         courses = get_courses_info()
         students = [i for i in execute_query("SELECT id,name FROM students")]
-        return render_template('register.html',students = students, courses = courses)
-
-
+        return render_template('register.html', students=students, courses=courses)
 
 
 @app.route('/add_student', methods=['GET', 'POST'])
@@ -183,7 +192,8 @@ def student_page(s_id):
         c_names.append(name[0])
     s_details["grades"] = {c_names[i]: grade[0] for i, grade in enumerate(execute_query(
         f"SELECT grade FROM students_courses WHERE student_id={s_id} AND course_id IN ({','.join(map(str, course_ids))})"))}
-    attendance_data = execute_query(f"SELECT ac.date, ac.attendance FROM attendances AS ac JOIN students_courses AS sc ON ac.course_id = sc.course_id WHERE sc.student_id = {s_id}")
+    attendance_data = execute_query(
+        f"SELECT ac.date, ac.attendance FROM attendances AS ac JOIN students_courses AS sc ON ac.course_id = sc.course_id WHERE sc.student_id = {s_id}")
     attendance_count = len(attendance_data)
     yes_count = sum(1 for data in attendance_data if data[1] == 'yes')
     average_attendance = round((yes_count / attendance_count) * 100)
@@ -323,8 +333,8 @@ def attendance(teacher_id):
 
 @app.route('/teacher/<teacher_id>/attend/<course_id>', methods=['GET', 'POST'])
 def course_attend(course_id, teacher_id):
-    course = [Course(c_id, name, desc, t_id) for c_id, name, desc, t_id in execute_query(
-        f"SELECT * FROM courses WHERE id={course_id}")]
+    courses = [Course(c_id, name, desc, t_id) for c_id, name, desc, t_id in execute_query(
+            f"SELECT * FROM courses WHERE teacher_id={teacher_id} AND id= {course_id}")]
     selected_date = request.args.get('selected_date')
 
     if request.method == 'POST':
@@ -346,38 +356,14 @@ def course_attend(course_id, teacher_id):
     student_ids = [ids[0] for ids in execute_query(
         f"SELECT student_id FROM students_courses WHERE course_id={course_id}")]
 
-    if request.method == 'POST':
-        return render_template("attend.html", course=course, date=selected_date, c_attend=attendance, t_id=teacher_id, available_dates=available_dates, student_ids=student_ids)
-
     d = [d[0] for d in execute_query(
         f"SELECT COUNT(*) FROM attendances WHERE course_id={course_id} AND date='{selected_date}'")]
 
     if d[0] > 0:
-        return render_template("attend.html", course=course, date=selected_date, c_attend=attendance, t_id=teacher_id, available_dates=available_dates, student_ids=student_ids)
+        return render_template("attend.html", course=courses, date=selected_date, c_attend=attendance, t_id=teacher_id, available_dates=available_dates, student_ids=student_ids)
 
     for s_id in student_ids:
         execute_query(
             f"INSERT INTO attendances (student_id, course_id, date) VALUES ('{s_id}','{course_id}','{selected_date}')")
 
-    return render_template("attend.html", course=course, date=selected_date, c_attend=attendance, t_id=teacher_id, available_dates=available_dates, student_ids=student_ids)
-
-
-@app.route("/messages", methods=['GET', 'POST'])
-def get_messages():
-    msg = [{"id": i, "msg": m}
-           for i, m in execute_query("SELECT * FROM messages")]
-    session["counter"] = 0
-    return msg
-
-
-@app.route("/addMessage", methods=["POST"])
-def add_message():
-    mymsg = request.json["message"]
-    execute_query(f"INSERT INTO messages (message) VALUES('{mymsg}')")
-    session["counter"] += 1
-    return mymsg
-
-
-@app.route("/newMessages")
-def new_messages():
-    return {"counter": session["counter"]}
+    return render_template("attend.html", course=courses, date=selected_date, c_attend=attendance, t_id=teacher_id, available_dates=available_dates, student_ids=student_ids)
