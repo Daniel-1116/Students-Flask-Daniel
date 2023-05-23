@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+    {% include 'navbar.html' %}
+
+    
+<div id="popup-container"></div>
+
+<div class="container">
+<div class="main">
+<form id="form-container" action="/register" method="post">
+    <label for="student">Student</label>
+    <select name="s_id" id="student" autofocus>
+        {% for i,n in students %}
+        <option value="{{i}}">{{n}}</option>
+        {% endfor %}
+    </select>
+    <label for="course">Course</label>
+    <select name="c_id" id="course">
+    {% for c in courses %}
+        <option value="{{c.id}}">{{c.name}}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Add</button>
+</form>
+</div>
+</div>
+
+{% endblock %}

@@ -1,48 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
+{% include "header.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/style.css">
-    <title>All Students</title>
-</head>
-
-<body>
-    <script src="/static/index.js" defer></script>
+{% block content %}
     {% include "navbar.html" %}
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    {% for message in messages %}
-    <p><strong>{{message}}</strong></p>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
 
     <div class="search-students">
-        <input type="text" class="keyword" id="search-input" placeholder="Search By Either Name/Email/Course..." onkeyup="filterTable()" autofocus>
+        <input type="text" class="keyword" id="search-input" placeholder="Search By Either Name/Email/Courses..." onkeyup="filterTable()" autofocus>
     </div>
 
 
     <div class="main-students">
-        <h1>My Students</h1>
         <table class="students-table" id="students-table">
             <tr>
                 <th>Name</th>
                 <th>Email</th>
-                <th>Course</th>
+                <th>Courses</th>
             </tr>
             {% for student in students %}
             <tr>
-                <td>{{ student.name }}</td>
+                <td><a href="/student/{{ student.s_id }}">{{ student.name }}</a></td>
                 <td>{{ student.email }}</td>
-                <td>{{ student.courses }}</td>
+                <td>{{ student.courses[student.s_id] }}</td>
             </tr>
         {% endfor %}
     </table>
     </div>
 
-</body>
-
-</html>
+{% endblock %}

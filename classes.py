@@ -6,10 +6,9 @@ class Course():
         self.c_id = c_id
         self.name = name
         self.desc = desc
-    
         self.t_name = self.teacher_name(teacher_id)
         self.students = self.assigned_students()
-        
+       
     def teacher_name(self,teacher_id):
         name = [name[0] for name in execute_query(f"SELECT name FROM teachers WHERE id='{teacher_id}'")]
         return name[0]
@@ -26,21 +25,20 @@ class Course():
         return self.name,self.t_name,self.students
     
 class Student():
-    def __init__(self,s_id,name,email,grade=0) -> None:
+    def __init__(self,s_id,name="default",email="default",phone="") -> None:
         self.s_id = s_id
         self.name = name
         self.email = email
-        self.grade = grade
-        self.courses = self.assigned_course()
+        self.phone = phone
+        self.courses = self.assigned_courses(s_id)
         
-    def assigned_course(self):
-        course_ids = [c_id[0] for c_id in execute_query(f"SELECT course_id FROM students_courses WHERE student_id='{self.s_id}'")]
-        course_name = []
-        for i in course_ids:
-            name = [n[0] for n in execute_query(f"SELECT name FROM courses WHERE id={i}")]
-            course_name.append(name[0])
-        courses = (' '.join(course_name))
-        return courses
+        
+    def assigned_courses(self,s_id):
+        course_ids = [c_id[0] for c_id in execute_query(f"SELECT course_id FROM students_courses WHERE student_id='{s_id}'")]
+        courses_by_students = {}
+        courses_by_students[s_id] = ', '.join([names[0] for i in course_ids for names in execute_query(f"SELECT name FROM courses WHERE id={i}")])
+        return courses_by_students
+
         
         
 class Attendence():
@@ -53,3 +51,4 @@ class Attendence():
         for s_id,attendence in attendance_records:
             attendences[s_id] = attendence
         return attendences 
+    

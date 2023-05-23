@@ -1,31 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
+{% include "header.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/style.css">
-    <title>Profile</title>
-</head>
-
-<body>
+{% block content %}
     {% include "navbar.html" %}
     <h1>Welcome {{ t_name }}</h1>
+
+    <div class="attendance"><a href="/teacher/{{ t_id }}/attendance">Attendance</a></div>
     {% if course %}
     {% for c in course %}
-    <h2>Course: {{ c.name }}</h2>
-    {% for student in c.students %}
-    <form action="" method="post" >
-        {{student}}
-        <input type="number" name="grade" id="">
-        <input type="submit" value="Change Grade">
-    </form>
+        <h2>Course: {{ c.name }}</h2>
+        {% for student in c.students %}
+            <div class="students-grades" style="display: flex; flex-direction: row; align-items: center;">
+                <form action="" method="post">
+                    <input type="hidden" name="c_id" value="{{ c.c_id }}">
+                    <input type="hidden" name="s_id" value="{{ student[0] }}">
+                    <p> {{ student[1] }}</p>
+                    {% set student_grades = grades.get(student[0], {}) %}
+                    {% set grade = student_grades.get(c.c_id, None) %}
+                    <input type="number" name="grade" id="" value="{{ grade }}">
+                    <input type="submit" value="Change Grade">
+                </form>
+            </div>
+        {% endfor %}
     {% endfor %}
-    {% endfor %}
-    {% else %}
+{% else %}
     <h2>No Course Assigned</h2>
-    {% endif %}
-</body>
+{% endif %}
 
-</html>
+{% endblock %}

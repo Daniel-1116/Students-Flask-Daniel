@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+    {% include "navbar.html" %}
+
+    <div class="profile">
+       
+        <h2>Welcome {{ s_details.name }}</h2>
+        <div class="profile-picture-container">
+            <img style="max-height: 200px; max-width:200px;" src="/static/images/{{ s_details.photo }}" alt="{{ s_details.name }}">
+        </div>
+            <div class="profile-info">
+            <form action="" method="post">
+              <label for="email">Email:</label><input type="email" name="email">
+              <label for="phone">Phone:</label><input type="text" name="phone">
+              <input type="submit" value="Update">
+            </form>
+            </div>
+          
+          
+          
+
+
+{% endblock %}

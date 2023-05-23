@@ -1,25 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/style.css">
-    
-    <title>Courses</title>
-</head>
-
-<body>
-    <script src="/static/index.js" defer></script>
-    {% include "navbar.html" %}
-    {% for c in course %}
-    <div class="course-info" onclick="onclick()">
-        <div class="course">{{ c.name }}</div>
-        <div class="teacher">{{ c.t_name }}</div>
-        <p class="desc">{{ c.desc }}</p>
-    </div>
-    {% endfor %}
-</body>
-
-</html>
+{% extends "base.html" %}
+{% block content %}
+{% include "navbar.html" %}
+<div class="course-info-container">
+{% for c in courses %}
+<div class="course-info">
+    <img src="{{ url_for('static', filename='images/' + c.image_filename) }}" alt="{{ c.name }} Image">
+    <div class="teacher">{{ c.t_name }}</div>
+    <p class="desc">{{ c.desc }}</p>
+</div>
+{% endfor %}
+</div>
+{% endblock %}

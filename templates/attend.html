@@ -1,54 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% block content %}
+{% include "navbar.html" %}
+<div class="attendance"><a href="/teacher/{{ t_id }}/attendance">Attendence</a></div>
+<div class="course-attendance">
+    <form method="get" action="">
+        <label for="selected_date">Select Date:</label>
+        <select id="selected_date" name="selected_date">
+            <option value="">-- Select Date --</option>
+            {% for date in available_dates %}
+                {% if date == selected_date %}
+                    <option value="{{ date }}" selected>{{ date }}</option>
+                {% else %}
+                    <option value="{{ date }}">{{ date }}</option>
+                {% endif %}
+            {% endfor %}
+            
+        </select>
+        <input type="submit" value="Show Attendance">
+    </form>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/style.css">
-    <title>Attend</title>
-</head>
-
-<body>
-    {% include "navbar.html" %}
-    <script src="/static/index.js"></script>
-    <div class="attendence"><a href="/attendence">Attendence</a></div>
-    <div class="course-attendence">
-        {% for c in course %}
-        <h1> Attendence For {{ c.name }}</h1>
+    {% for c in course %}
+        <h1>Attendance For {{ c.name }}</h1>
         <p>Date: {{ date }}</p>
-        {% for s_id,s_name in c.students %}
-        <div class="students-attend">
-            <form action="" method="post">
-                <div class="student-info">
-                    <input type="hidden" name="s_id_" value="{{s_id}}">
-                   
-                    <span class="student-name" style="width: 120px;">{{ s_name }}</span>
-                    <div class="radio-buttons">
-                        {% if c_attend[s_id] == 'yes' %}
-                        YES<input type="radio" name="choice" value="yes" checked>
-                        {% else %}
-                        YES<input type="radio" name="choice" value="yes">
-                        {% endif %}
+        {% for s_id, s_name in c.students %}
+            <div class="students-attend">
+                <form action="" method="post">
+                    <div class="student-info">
+                        <input type="hidden" name="s_id_" value="{{ s_id }}">
+                        <input type="hidden" name="selected_date" value="{{ date }}">
+                        <span class="student-name" style="width: 120px;">{{ s_name }}</span>
+                        <div class="radio-buttons">
+                            {% if c_attend[s_id] is not none %}
+                                {% if c_attend[s_id] == 'yes' %}
+                                    YES<input type="radio" name="choice" value="yes" checked>
+                                {% else %}
+                                    YES<input type="radio" name="choice" value="yes">
+                                {% endif %}
 
-                        {% if c_attend[s_id] == 'no' %}
-                        NO<input type="radio" name="choice" value="no" checked>
-                        {% else %}
-                        NO<input type="radio" name="choice" value="no">
-                        {% endif %}
-                        
-                    
+                                {% if c_attend[s_id] == 'no' %}
+                                    NO<input type="radio" name="choice" value="no" checked>
+                                {% else %}
+                                    NO<input type="radio" name="choice" value="no">
+                                {% endif %}
+                            {% else %}
+                                YES<input type="radio" name="choice" value="yes">
+                                NO<input type="radio" name="choice" value="no">
+                            {% endif %}
+                        </div>
                     </div>
-                </div>
-                <input type="submit" value="Set">
-            </form>
-        </div>
-        <br>
+                    <div class="submit-container">
+                        <input type="submit" value="Set">
+                    </div>
+                </form>
+            </div>
+            <br>
         {% endfor %}
-        {% endfor %}
+    {% endfor %}
+</div>
 
-    </div>
 
-</body>
 
-</html>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+{% include "navbar.html" %}
+
+<div class="profile">
+  <div class="profile-picture-container">
+    <img class="profile-picture" src="/static/images/{{ s_details.photo }}" alt="{{ s_details.name }}">
+    <div class="edit-icon">&#9998;</div>
+    <form action="/upload_photo/{{ s_details.s_id }}" method="post" enctype="multipart/form-data" class="upload-photo-form">
+      <input type="file" name="file" style="display: none;">
+    </form>
+  </div>
+  <div class="profile-info">
+    <h2>Welcome {{ s_details.name }}</h2>
+    <h3>Contact Information</h3>
+    <p>Email: {{ s_details.email }}</p>
+    <p>Phone: {{ s_details.phone }}</p>
+  </div>
+  <form action="/update/{{ s_details.s_id }}" method="get" class="details">
+    <input type="submit" value="Update Information">
+  </form>
+</div>
+
+<div class="course-details">
+  <h2>Courses</h2>
+  {% for course, grade in s_details.grades.items() %}
+  <p>{{ course }} - {{ grade }} Attendance: {{ s_details.average_attendance }}%</p>
+  {% endfor %}
+</div>
+
+
+
+
+  {% endblock %}

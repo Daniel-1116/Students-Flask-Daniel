@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+{% include "navbar.html" %}
+<div class="course-info-container">
+    {% for c in courses %}
+    <div class="course-info">
+        <a href="/teacher/{{ teacher_id }}/attend/{{ c.id }}">
+            <img src="{{ url_for('static', filename='images/' + c.image_filename) }}" alt="{{ c.name }} Image">
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
+
+
+{% endblock %}
