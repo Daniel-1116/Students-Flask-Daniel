@@ -328,6 +328,9 @@ def course_attend(course_id, teacher_id):
     selected_date = request.args.get('selected_date')
 
     if request.method == 'POST':
+        course = [Course(c_id,name,desc,t_id) for c_id,name,desc,t_id in execute_query(f"SELECT * FROM courses WHERE id={course_id}")]
+        date = datetime.date.today()
+        date = '2023-03-16'
         choice = request.form['choice']
         s_id = request.form['s_id_']
         selected_date = request.form['selected_date']
@@ -335,49 +338,24 @@ def course_attend(course_id, teacher_id):
             f"UPDATE attendances SET attendance='{choice}' WHERE student_id='{s_id}' AND course_id='{course_id}' AND date='{selected_date}'")
         attendance = get_records(course_id, selected_date)
     else:
-        if selected_date:
-            attendance = get_records(course_id, selected_date)
-        else:
-            selected_date = datetime.date.today().strftime('%Y-%m-%d')
-            attendance = get_records(course_id, selected_date)
+        course = [Course(c_id,name,desc,t_id) for c_id,name,desc,t_id in execute_query(f"SELECT * FROM courses WHERE id={course_id}")]
+        date = datetime.date.today()
+        attendence = get_records(course_id)
+        dates = [d[0] for d in execute_query(f"SELECT date FROM attendances WHERE course_id ={course_id}")]
+        if date in dates:
+            return render_template("attend.html",course = course, date = date,c_attend = attendence)
+        else:    
+            course = [Course(c_id,name,desc,t_id) for c_id,name,desc,t_id in execute_query(f"SELECT * FROM courses WHERE id={course_id}")]
+            date = datetime.date.today()
+            attendence = get_records(course_id)
+            student_ids = [ids[0] for ids in execute_query(f"SELECT student_id FROM students_courses WHERE course_id = {course_id}")]
+            for s_id in student_ids:
+                execute_query(f"INSERT INTO attendances (student_id,course_id,date) VALUES ('{s_id}','{course_id}','{date}')")
+            return render_template("attend.html",course = course, date = date,c_attend = attendence)
+           
+    
+        
+        
 
-    available_dates = [date[0] for date in execute_query(
-        f"SELECT DISTINCT date FROM attendances WHERE course_id={course_id}")]
-    student_ids = [ids[0] for ids in execute_query(
-        f"SELECT student_id FROM students_courses WHERE course_id={course_id}")]
-
-    if request.method == 'POST':
-        return render_template("attend.html", course=course, date=selected_date, c_attend=attendance, t_id=teacher_id, available_dates=available_dates, student_ids=student_ids)
-
-    d = [d[0] for d in execute_query(
-        f"SELECT COUNT(*) FROM attendances WHERE course_id={course_id} AND date='{selected_date}'")]
-
-    if d[0] > 0:
-        return render_template("attend.html", course=course, date=selected_date, c_attend=attendance, t_id=teacher_id, available_dates=available_dates, student_ids=student_ids)
-
-    for s_id in student_ids:
-        execute_query(
-            f"INSERT INTO attendances (student_id, course_id, date) VALUES ('{s_id}','{course_id}','{selected_date}')")
-
-    return render_template("attend.html", course=course, date=selected_date, c_attend=attendance, t_id=teacher_id, available_dates=available_dates, student_ids=student_ids)
-
-
-@app.route("/messages", methods=['GET', 'POST'])
-def get_messages():
-    msg = [{"id": i, "msg": m}
-           for i, m in execute_query("SELECT * FROM messages")]
-    session["counter"] = 0
-    return msg
-
-
-@app.route("/addMessage", methods=["POST"])
-def add_message():
-    mymsg = request.json["message"]
-    execute_query(f"INSERT INTO messages (message) VALUES('{mymsg}')")
-    session["counter"] += 1
-    return mymsg
-
-
-@app.route("/newMessages")
-def new_messages():
-    return {"counter": session["counter"]}
+   
+    
