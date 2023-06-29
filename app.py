@@ -192,12 +192,14 @@ def student_page(s_id):
         c_names.append(name[0])
     s_details["grades"] = {c_names[i]: grade[0] for i, grade in enumerate(execute_query(
         f"SELECT grade FROM students_courses WHERE student_id={s_id} AND course_id IN ({','.join(map(str, course_ids))})"))}
-    attendance_data = execute_query(
-        f"SELECT ac.date, ac.attendance FROM attendances AS ac JOIN students_courses AS sc ON ac.course_id = sc.course_id WHERE sc.student_id = {s_id}")
-    attendance_count = len(attendance_data)
-    yes_count = sum(1 for data in attendance_data if data[1] == 'yes')
-    average_attendance = round((yes_count / attendance_count) * 100)
-    s_details["average_attendance"] = max(average_attendance, 0)
+    s_details["average_attendance"] = {}
+    for course_id, course_name in zip(course_ids, c_names):
+        attendance_data = execute_query(f"SELECT date, attendance FROM attendances WHERE course_id={course_id} AND student_id={s_id}")
+        attendance_count = len(attendance_data)
+        yes_count = sum(1 for data in attendance_data if data[1] == 'yes')
+        average_attendance = round((yes_count / attendance_count) * 100) if attendance_count > 0 else 0
+        s_details["average_attendance"][course_name] = average_attendance
+        print(s_details)
     return render_template("student_profile.html", s_details=s_details, c_names=c_names, course_ids=course_ids)
 
 

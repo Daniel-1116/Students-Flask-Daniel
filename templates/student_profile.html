@@ -24,7 +24,7 @@
 <div class="course-details">
   <h2>Courses</h2>
   {% for course, grade in s_details.grades.items() %}
-  <p>{{ course }} - {{ grade }} Attendance: {{ s_details.average_attendance }}%</p>
+  <p><a href="/teacher/{{ teacher_id }}/attend/{{  }}"></a>{{ course }} - {{ grade }} Attendance: {{ s_details.average_attendance[course]}}%</p>
   {% endfor %}
 </div>
 
